@@ -1,0 +1,50 @@
+# 1 hourglass (pascal3D) (toy sample)
+
+th main.lua -expID pascal3D-toy -dataset pascal3D -task pascalKps -nEpochs 1 -trainIters 1 -trainBatch 1 -validIters 1 -validBatch 1 -nValidImgs 1 -nStack 1
+
+
+# Stack of 8 hourglasses (pascal3D)
+(check if a double hyphen is need (eg. --expID))
+
+th main.lua -expID pascal3D-stack-of-8 -dataset pascal3D -task pascalKps -nEpochs 150 -trainIters 300 -trainBatch 6 -validIters 10 -validBatch 10 -nValidImgs 100 -nStack 8
+
+
+# Pascal-base (unaugmented), 1 hourglass
+
+th main.lua -expID pascal3D-base -dataset pascal3D -task pascalKps -nEpochs 50 -trainIters 100 -trainBatch 18 -validIters 100 -validBatch 10 -nValidImgs 210 -nStack 1
+
+# Finetuning (Pascal-base), 1 hourglass
+
+th main.lua -expID finetuning-stack-of-1 -dataset pascal3D -task pascalKps -nEpochs 100 -trainIters 100 -trainBatch 18 -validIters 100 -validBatch 10 -nValidImgs 210 -nStack 1 -optMethod adam -GPU 2 -loadModel /home/km/code/hourglass-experiments/exp/pascal3D/default-stack-of-1/model_150.t7 -snapshot 25 -LR 2.5e-5 -momentum 0.0099
+
+
+
+
+
+
+
+
+
+_____________________________________________- 64 x 64
+
+th main.lua -expID pascal3D64-base-stack-of-8-finetune1 -dataset pascal3D -task pascalKps -nEpochs 150 -trainIters 90 -trainBatch 28 -validIters 100 -validBatch 20 -nValidImgs 200 -nStack 8 -optMethod adam -loadModel /home/sarthaksharma/code/hourglass-experiments/exp/pascal3D/pascal3D64-base-stack-of-8/model_45.t7 -LR 2.5e-5 -momentum 0.9 -weightDecay 0.004 -nGPU 4
+
+ CUDA_VISIBLE_DEVICES=2,3 th main.lua -expID pascal3D64-base-stack-of-8-full -dataset pascal3D -task pascalKps -nEpochs 4 -trainIters 26429 -trainBatch 14 -validIters 1500 -validBatch 14 -nValidImgs 21000 -nStack 8 -optMethod adam -LR 2.5e-5 -momentum 0.009 -weightDecay 0.004
+
+
+
+CUDA_VISIBLE_DEVICES=2,3 th main.lua -expID pascal3D64-stack-of-8-full-finetune1 -dataset pascal3D -task pascalKps -nEpochs 4 -trainIters 26429 -trainBatch 14 -validIters 1500 -validBatch 14 -nValidImgs 21000 -nStack 8 -optMethod sgd -loadModel /tmp/code/hourglass-experiments/exp/pascal3D/pascal3D64-stack-of-8-full/model_6.t7 -LR 2.5e-7 -momentum 0.0009 -weightDecay 0.004
+
+
+
+
+
+
+
+
+
+
+
+___________________________________________________________________For validation
+
+CUDA_VISIBLE_DEVICES=2,3 th deploy.lua -expID deploy_original64-full-stack-of-8 -dataset pascal3D -task pascalKps -nEpochs 4 -trainIters 2 -trainBatch 14 -validIters 17 -validBatch 14 -nValidImgs 238 -nStack 8 -optMethod sgd -loadModel /home/sarthaksharma/code/hourglass-experiments/exp/pascal3D/pascal3D64-stack-of-8-fulldata-finetune1/model_4.t7 -LR 2.5e-8 -momentum 0.0009 -weightDecay 0.004
